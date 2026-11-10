@@ -95,12 +95,11 @@ img{max-width:100%;display:block;}
 /* ---- urgency bar ---- */
 .urgbar{
   background:var(--blue-deep);color:#fff;text-align:center;
-  font-size:13px;font-weight:600;letter-spacing:.02em;
-  padding-block:10px;
-  position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  font-size:13.5px;font-weight:600;letter-spacing:.02em;
+  padding-block:11px;
 }
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--blue-deep);}
-.urgbar b{color:var(--yellow);}
+.urgbar b{color:var(--yellow);font-variant-numeric:tabular-nums;}
 
 /* full-bleed: cancela o gutter do body pra cor de fundo encostar na borda real da tela */
 .hero, .dor, .bonus-sec, .oferta{
@@ -123,6 +122,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @media (max-width:860px){
   .hero-grid{grid-template-columns:1fr;text-align:center;}
   .hero-text{align-items:center;}
+  .hero-art{order:-1;}
 }
 .hero .eyebrow{background:var(--yellow);color:var(--blue-deep);}
 .hero h1{
@@ -163,7 +163,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   text-align:center;font-size:13px;line-height:1.1;rotate:8deg;box-shadow:0 8px 18px rgba(0,0,0,.3);
 }
 @media (max-width:860px){
-  .hero-art{max-width:min(94vw,420px);margin-top:4px;}
+  .hero-art{max-width:min(94vw,420px);margin-top:0;margin-bottom:18px;}
   .hero-art img{border-radius:20px;border-width:4px;}
   .hero-badge{width:70px;height:70px;font-size:12px;right:-6px;top:-12px;}
 }
@@ -371,7 +371,7 @@ footer a{color:var(--ink-soft);}
 <body>
 
 
-<div class="urgbar">⚡ <b>Oferta de lançamento</b> termina em breve — 71% das vagas já preenchidas</div>
+<div class="urgbar">⏳ Oferta de lançamento termina em <b id="urg-timer">20:00</b> — depois o preço sobe</div>
 
 <section class="hero">
   <div class="wrap hero-grid">
@@ -668,6 +668,33 @@ footer a{color:var(--ink-soft);}
   }
   render();
   setInterval(render,1000);
+
+  // timer de 20min no topo: o prazo fica salvo na sessão, então não reinicia se a pessoa der F5
+  (function(){
+    var urgEl = document.getElementById('urg-timer');
+    if(!urgEl) return;
+    var DURATION = 20*60*1000;
+    var deadline;
+    try{
+      var saved = sessionStorage.getItem('urgDeadline');
+      deadline = saved ? parseInt(saved,10) : null;
+      if(!deadline || deadline < Date.now()){
+        deadline = Date.now() + DURATION;
+        sessionStorage.setItem('urgDeadline', String(deadline));
+      }
+    }catch(e){
+      deadline = Date.now() + DURATION;
+    }
+    function renderUrg(){
+      var remaining = Math.max(0, deadline - Date.now());
+      var m = Math.floor(remaining/60000);
+      var s = Math.floor((remaining%60000)/1000);
+      var pad=function(n){return String(n).padStart(2,'0');};
+      urgEl.textContent = pad(m)+':'+pad(s);
+    }
+    renderUrg();
+    setInterval(renderUrg,1000);
+  })();
 
   // faq accordion
   document.querySelectorAll('.faq-item').forEach(function(item){
