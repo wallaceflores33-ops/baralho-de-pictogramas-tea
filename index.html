@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>Pictogramas TEA</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
@@ -62,7 +67,6 @@ img{max-width:100%;display:block;}
   background:var(--yellow);
   padding:6px 14px;border-radius:999px;
 }
-:root[data-theme="dark"] .eyebrow, @media (prefers-color-scheme:dark){ }
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   font-family:var(--display);font-weight:600;font-size:clamp(17px,2.4vw,20px);
@@ -144,6 +148,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .hero-bullets li{font-size:clamp(11.5px,2.6vw,14.5px);}
   .hero-bullets li::before{width:18px;height:18px;font-size:10px;}
 }
+@media (max-width:400px){
+  .hero-bullets{grid-template-columns:1fr;justify-items:center;}
+  .hero-bullets li{font-size:13.5px;}
+}
 .hero-cta{margin-top:28px;}
 @media (max-width:860px){ .hero-cta{display:none;} }
 .hero-art{position:relative;max-width:360px;margin:0 auto;}
@@ -212,6 +220,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* ---- amplitude ---- */
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px;}
 @media (max-width:860px){ .cat-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:460px){ .cat-grid{grid-template-columns:1fr;} }
 .cat-card{border-radius:20px;padding:22px 18px;color:#fff;min-height:170px;display:flex;flex-direction:column;justify-content:space-between;}
 .cat-card h3{font-size:19px;}
 .cat-card p{font-size:13.5px;margin:10px 0 0;opacity:.92;}
@@ -307,6 +316,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .deliver-list li::before{content:"✓";flex:none;width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px;}
 .secure-row{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:12.5px;color:var(--ink-soft);}
 .secure-row span{display:flex;align-items:center;gap:6px;}
+@media (max-width:380px){
+  .oferta-box{padding:20px 16px;}
+  .timer{gap:6px;}
+  .timer .t{min-width:44px;padding:8px 6px;font-size:19px;border-radius:9px;}
+  .timer .sep{font-size:17px;}
+  .price-new{font-size:38px;}
+  .launch-tag{font-size:13px;padding:7px 14px;}
+}
 
 /* ---- depoimentos ---- */
 /* ---- garantia ---- */
@@ -350,6 +367,9 @@ footer a{color:var(--ink-soft);}
 .center{text-align:center;}
 .section > .wrap > h2{font-size:clamp(26px,4vw,34px);}
 </style>
+</head>
+<body>
+
 
 <div class="urgbar">⚡ <b>Oferta de lançamento</b> termina em breve — 71% das vagas já preenchidas</div>
 
@@ -670,3 +690,6 @@ footer a{color:var(--ink-soft);}
   }
 })();
 </script>
+
+</body>
+</html>
