@@ -6,6 +6,24 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <title>Pictogramas TEA</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1672490744598929');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1672490744598929&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<script src="https://caktomate-synergy.lovable.app/tracking.js" defer></script>
 <style>
 /* Layout: cartões de pictograma como motivo recorrente — tags coloridas de categoria, grid assimétrico, faixas diagonais */
 :root{
@@ -545,8 +563,7 @@ footer a{color:var(--ink-soft);}
     <div class="oferta-box reveal">
       <div class="timer-label">Oferta expira em:</div>
       <div class="timer">
-        <div class="t" id="t-h">00</div><div class="sep">:</div>
-        <div class="t" id="t-m">00</div><div class="sep">:</div>
+        <div class="t" id="t-m">20</div><div class="sep">:</div>
         <div class="t" id="t-s">00</div>
       </div>
       <div class="price-warn">O preço sobe assim que o cronômetro zerar</div>
@@ -576,7 +593,7 @@ footer a{color:var(--ink-soft);}
         <li>Acesso imediato e vitalício ao material</li>
       </ul>
 
-      <a href="#" class="btn btn-wide">LIBERAR ACESSO AGORA</a>
+      <a href="https://pay.cakto.com.br/3353d5e_1308010" class="btn btn-wide">LIBERAR ACESSO AGORA</a>
 
       <div class="secure-row">
         <span>🔒 Compra 100% protegida</span>
@@ -640,7 +657,7 @@ footer a{color:var(--ink-soft);}
   <div class="wrap">
     <h2>Ela só precisa apontar. Você já entende.</h2>
     <p>60 pictogramas prontos pra transformar a comunicação em casa, na escola e na terapia, com os bônus de rotina, personalização e orientação de uso.</p>
-    <a href="#oferta" class="btn">Quero o baralho agora</a>
+    <a href="https://pay.cakto.com.br/3353d5e_1308010" class="btn">Quero o baralho agora</a>
   </div>
 </section>
 
@@ -653,47 +670,36 @@ footer a{color:var(--ink-soft);}
 
 <script>
 (function(){
-  // countdown reinicia a cada 2h a partir de um ponto fixo, pra sempre mostrar urgência real
+  // timer único de 20min: alimenta a barra do topo E o timer da oferta, sempre com o mesmo valor.
+  // o prazo fica salvo na sessão, então não reinicia do zero se a pessoa der F5.
+  var DURATION = 20*60*1000;
+  var deadline;
+  try{
+    var saved = sessionStorage.getItem('urgDeadline');
+    deadline = saved ? parseInt(saved,10) : null;
+    if(!deadline || deadline < Date.now()){
+      deadline = Date.now() + DURATION;
+      sessionStorage.setItem('urgDeadline', String(deadline));
+    }
+  }catch(e){
+    deadline = Date.now() + DURATION;
+  }
+
+  var pad = function(n){return String(n).padStart(2,'0');};
+  var urgEl = document.getElementById('urg-timer');
+  var em = document.getElementById('t-m'), es = document.getElementById('t-s');
+
   function render(){
-    var period = 2*60*60*1000;
-    var now = Date.now();
-    var remaining = period - (now % period);
-    var h = Math.floor(remaining/3600000);
-    var m = Math.floor((remaining%3600000)/60000);
+    var remaining = Math.max(0, deadline - Date.now());
+    var m = Math.floor(remaining/60000);
     var s = Math.floor((remaining%60000)/1000);
-    var pad=function(n){return String(n).padStart(2,'0');};
-    var eh=document.getElementById('t-h'), em=document.getElementById('t-m'), es=document.getElementById('t-s');
-    if(eh){eh.textContent=pad(h);em.textContent=pad(m);es.textContent=pad(s);}
+    var text = pad(m)+':'+pad(s);
+    if(urgEl) urgEl.textContent = text;
+    if(em) em.textContent = pad(m);
+    if(es) es.textContent = pad(s);
   }
   render();
   setInterval(render,1000);
-
-  // timer de 20min no topo: o prazo fica salvo na sessão, então não reinicia se a pessoa der F5
-  (function(){
-    var urgEl = document.getElementById('urg-timer');
-    if(!urgEl) return;
-    var DURATION = 20*60*1000;
-    var deadline;
-    try{
-      var saved = sessionStorage.getItem('urgDeadline');
-      deadline = saved ? parseInt(saved,10) : null;
-      if(!deadline || deadline < Date.now()){
-        deadline = Date.now() + DURATION;
-        sessionStorage.setItem('urgDeadline', String(deadline));
-      }
-    }catch(e){
-      deadline = Date.now() + DURATION;
-    }
-    function renderUrg(){
-      var remaining = Math.max(0, deadline - Date.now());
-      var m = Math.floor(remaining/60000);
-      var s = Math.floor((remaining%60000)/1000);
-      var pad=function(n){return String(n).padStart(2,'0');};
-      urgEl.textContent = pad(m)+':'+pad(s);
-    }
-    renderUrg();
-    setInterval(renderUrg,1000);
-  })();
 
   // faq accordion
   document.querySelectorAll('.faq-item').forEach(function(item){
